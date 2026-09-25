@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>লিমন রেফ্রিজারেটর</title>
+<style>
+:root{--p:#1266a3;--p2:#0b4f7d;--bg:#f4f7fa;--card:#fff;--text:#18222d;--muted:#6b7785;--ok:#137a49;--warn:#a45d00;--red:#c62828}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,"Noto Sans Bengali",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer;border:0}.top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #e3e8ee}.nav{max-width:1200px;margin:auto;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}.brand{font-size:20px;font-weight:900;color:var(--p)}.navright,.actions{display:flex;gap:7px;flex-wrap:wrap}.wrap{max-width:1200px;margin:18px auto;padding:0 14px}
+.btn{border-radius:10px;padding:10px 13px;font-weight:800}.primary{background:var(--p);color:#fff}.secondary{background:#e8f2f9;color:var(--p2)}.ok{background:#e7f7ef;color:var(--ok)}.danger{background:#ffebeb;color:var(--red)}.card,.stat{background:var(--card);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 3px 18px #0000000b}.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.n{font-size:22px;font-weight:900}.muted{font-size:12px;color:var(--muted)}.form{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}input,select{width:100%;border:1px solid #d6dfe8;border-radius:10px;padding:10px;background:#fff}.span2{grid-column:span 2}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.search{min-width:260px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:1050px}th,td{padding:9px;border-bottom:1px solid #edf0f3;text-align:right;white-space:nowrap}th{background:#f7f9fc;font-size:12px}.badge{display:inline-block;padding:4px 8px;border-radius:30px;font-size:11px;font-weight:800}.paid{background:#e7f7ef;color:var(--ok)}.due{background:#fff1dc;color:var(--warn)}.empty{text-align:center;padding:28px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:#0008;display:grid;place-items:center;padding:14px;z-index:50}.modalbox{background:#fff;width:min(850px,100%);max-height:92vh;overflow:auto;border-radius:18px;padding:18px}.modalhead{display:flex;justify-content:space-between;align-items:center;gap:10px}.months{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px}.month{border:1px solid #dfe6ed;border-radius:12px;padding:11px}.month.active{background:#f0fbf5;border-color:#7ac49d}.monthtop{display:flex;justify-content:space-between;gap:5px}.month button{padding:7px 9px}.notice{padding:10px;border-radius:10px;background:#f5f8fb;color:var(--muted);font-size:13px}.hidden{display:none!important}
+@media(max-width:950px){.grid{grid-template-columns:repeat(3,1fr)}.form{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){.grid{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr}.span2{grid-column:span 1}.months{grid-template-columns:repeat(2,1fr)}.brand{font-size:16px}.nav{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header class="top"><div class="nav">
+  <div class="brand">❄️ লিমন রেফ্রিজারেটর</div>
+  <div class="navright">
+    <button class="btn secondary" onclick="backupDownload()">💾 Backup</button>
+    <label class="btn secondary" style="cursor:pointer;margin:0">📤 Restore<input id="restoreFile" type="file" accept=".json" hidden onchange="restoreBackup(event)"></label>
+    <button class="btn secondary" onclick="printReport()">📄 রিপোর্ট</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+<section class="grid">
+  <div class="stat"><div class="muted">মোট কাস্টমার</div><div class="n" id="sc">0</div></div>
+  <div class="stat"><div class="muted">চলমান ফ্রিজ</div><div class="n" id="sf">0</div></div>
+  <div class="stat"><div class="muted">মাসিক ভাড়া</div><div class="n" id="sr">৳0</div></div>
+  <div class="stat"><div class="muted">এই মাসে আদায়</div><div class="n" id="sp">৳0</div></div>
+  <div class="stat"><div class="muted">এই মাসের বকেয়া</div><div class="n" id="sd">৳0</div></div>
+  <div class="stat"><div class="muted">মোট আদায়</div><div class="n" id="sa">৳0</div></div>
+</section>
+
+<section class="card">
+<h2 style="margin-top:0">➕ নতুন কাস্টমার / ফ্রিজ</h2>
+<div class="form">
+<div><label>Customer ID</label><input id="cid" placeholder="LR-001"></div>
+<div><label>কাস্টমারের নাম</label><input id="name" placeholder="নাম"></div>
+<div><label>মোবাইল</label><input id="phone" placeholder="01XXXXXXXXX"></div>
+<div><label>Fridge No.</label><input id="fridge" placeholder="FR-001"></div>
+<div><label>মাসিক ভাড়া</label><input id="rent" type="number" min="0" placeholder="500"></div>
+<div><label>তারিখ</label><input id="date" type="date"></div>
+<div><label>অ্যাডভান্স</label><input id="advance" type="number" min="0" placeholder="0"></div>
+<div><label>ব্র্যান্ড</label><input id="brand" placeholder="Walton / Singer"></div>
+<div class="span2"><label>লোকেশন</label><input id="location" placeholder="দোকান / এলাকা"></div>
+<div><label>স্ট্যাটাস</label><select id="status"><option value="active">চলমান</option><option value="inactive">বন্ধ</option></select></div>
+<div><button class="btn primary" style="margin-top:22px" onclick="addCustomer()">সংরক্ষণ</button></div>
+</div>
+</section>
+
+<section class="card">
+<h2 style="margin-top:0">🔎 কাস্টমার খুঁজুন</h2>
+<div class="toolbar">
+<div class="search"><label>নাম / ID / মোবাইল / ফ্রিজ / এলাকা</label><input id="search" oninput="render()" placeholder="Search..."></div>
+<div><label>স্ট্যাটাস</label><select id="filter" onchange="render()"><option value="all">সব</option><option value="active">চলমান</option><option value="inactive">বন্ধ</option></select></div>
+</div>
+</section>
+
+<section class="card">
+<h2 style="margin-top:0">👥 কাস্টমার তালিকা</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th><th>ID</th><th>নাম</th><th>মোবাইল</th><th>ফ্রিজ</th><th>ব্র্যান্ড</th><th>লোকেশন</th><th>ভাড়া</th><th>স্ট্যাটাস</th><th>কাজ</th>
+</tr></thead><tbody id="rows"></tbody></table></div>
+<div id="empty" class="empty hidden">কোনো কাস্টমার পাওয়া যায়নি।</div>
+</section>
+</main>
+
+<div id="modal" class="modal hidden"><div class="modalbox">
+<div class="modalhead"><div><h2 id="mt" style="margin:0">মাসিক হিসাব</h2><div id="mi" class="muted"></div></div><button class="btn danger" onclick="closeModal()">বন্ধ</button></div>
+<div class="notice" style="margin-top:10px">সবুজ = আদায় হয়েছে। হলুদ = বকেয়া। <b>Edit</b> দিয়ে আদায়ের টাকা/তারিখ বদলানো যাবে।</div>
+<div class="months" id="months"></div>
+<div class="actions" style="margin-top:14px">
+<button class="btn secondary" onclick="editCustomer()">✏️ Customer Edit</button>
+<button class="btn secondary" onclick="sendWhatsApp()">📱 WhatsApp</button>
+</div>
+</div></div>
+
+<script>
+const KEY='limon_refrigerator_data_v5';
+const MONTHS=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+let data=loadData(), selectedId=null;
+document.getElementById('date').value=new Date().toISOString().slice(0,10);
+
+function loadData(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]}}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function money(n){return '৳'+Number(n||0).toLocaleString('bn-BD')}
+function val(id){return document.getElementById(id).value.trim()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function addCustomer(){
+ const c={id:val('cid')||('LR-'+String(data.length+1).padStart(3,'0')),name:val('name'),phone:val('phone'),fridge:val('fridge'),rent:Number(val('rent'))||0,date:val('date'),advance:Number(val('advance'))||0,brand:val('brand'),location:val('location'),status:val('status'),paid:{}};
+ if(!c.name||!c.fridge)return alert('কাস্টমারের নাম ও Fridge No. দিন।');
+ if(data.some(x=>x.id===c.id))return alert('এই Customer ID আগে আছে।');
+ data.push(c);save();['cid','name','phone','fridge','rent','advance','brand','location'].forEach(id=>document.getElementById(id).value='');alert('কাস্টমার সংরক্ষণ হয়েছে');
+}
+function render(){
+ const q=val('search').toLowerCase(), f=document.getElementById('filter').value;
+ const list=data.filter(c=>(f==='all'||c.status===f)&&(!q||[c.id,c.name,c.phone,c.fridge,c.brand,c.location].join(' ').toLowerCase().includes(q)));
+ const now=new Date(), key=now.getFullYear()+'-'+now.getMonth(); let paid=0,due=0,totalPaid=0;
+ data.forEach(c=>{Object.values(c.paid||{}).forEach(p=>totalPaid+=Number(p?.amount)||0);if(c.status==='active'){if(c.paid?.[key])paid+=Number(c.paid[key].amount)||0;else due+=Number(c.rent)||0}});
+ document.getElementById('sc').textContent=data.length.toLocaleString('bn-BD');
+ document.getElementById('sf').textContent=data.filter(c=>c.status==='active').length.toLocaleString('bn-BD');
+ document.getElementById('sr').textContent=money(data.filter(c=>c.status==='active').reduce((a,c)=>a+Number(c.rent||0),0));
+ document.getElementById('sp').textContent=money(paid);document.getElementById('sd').textContent=money(due);document.getElementById('sa').textContent=money(totalPaid);
+ const tbody=document.getElementById('rows');tbody.innerHTML='';
+ document.getElementById('empty').classList.toggle('hidden',list.length>0);
+ list.forEach((c,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}</td><td><b>${esc(c.id)}</b></td><td>${esc(c.name)}</td><td>${esc(c.phone)}</td><td>${esc(c.fridge)}</td><td>${esc(c.brand)}</td><td>${esc(c.location)}</td><td>${money(c.rent)}</td><td><span class="badge ${c.status==='active'?'paid':'due'}">${c.status==='active'?'চলমান':'বন্ধ'}</span></td><td><button class="btn primary" onclick="openMonths('${esc(c.id)}')">হিসাব</button> <button class="btn secondary" onclick="quickEdit('${esc(c.id)}')">Edit</button> <button class="btn danger" onclick="removeCustomer('${esc(c.id)}')">মুছুন</button></td>`;tbody.appendChild(tr)});
+}
+function openMonths(id){
+ selectedId=id;const c=data.find(x=>String(x.id)===String(id));if(!c)return;
+ document.getElementById('mt').textContent=c.name+' — মাসিক হিসাব';document.getElementById('mi').textContent=c.id+' | '+c.fridge+' | মাসিক '+money(c.rent);
+ const box=document.getElementById('months');box.innerHTML='';const y=new Date().getFullYear();
+ MONTHS.forEach((name,i)=>{const key=y+'-'+i,p=c.paid?.[key],d=document.createElement('div');d.className='month '+(p?'active':'');
+ d.innerHTML=`<div class="monthtop"><b>${name} ${y}</b><span class="badge ${p?'paid':'due'}">${p?'আদায়':'বকেয়া'}</span></div><div class="mini" style="margin-top:5px">${p?money(p.amount)+' • '+esc(p.date||''):'বকেয়া: '+money(c.rent)}</div><div style="margin-top:8px"><button class="btn ${p?'secondary':'ok'}" onclick="payMonth('${key}')">${p?'✏️ Edit':'💰 আদায়'}</button>${p?' <button class="btn danger" onclick="clearMonth(\\''+key+'\\')">বকেয়া করুন</button>':''}</div>`;
+ box.appendChild(d)});
+ document.getElementById('modal').classList.remove('hidden');
+}
+function payMonth(key){
+ const c=data.find(x=>x.id===selectedId);if(!c)return;const old=c.paid?.[key];
+ let amount=prompt('আদায়ের টাকা লিখুন',old?.amount??c.rent);if(amount===null)return;amount=Number(amount);if(!Number.isFinite(amount)||amount<0)return alert('সঠিক টাকা লিখুন');
+ let date=prompt('আদায়ের তারিখ (YYYY-MM-DD)',old?.date||new Date().toISOString().slice(0,10));if(date===null)return;
+ c.paid=c.paid||{};c.paid[key]={amount,date};save();openMonths(selectedId);
+}
+function clearMonth(key){const c=data.find(x=>x.id===selectedId);if(!c)return;if(confirm('এই মাসের আদায় মুছে বকেয়া করবেন?')){delete (c.paid||{})[key];save();openMonths(selectedId)}}
+function closeModal(){document.getElementById('modal').classList.add('hidden')}
+function quickEdit(id){selectedId=id;editCustomer()}
+function editCustomer(){
+ const c=data.find(x=>x.id===selectedId);if(!c)return;
+ const n=prompt('কাস্টমারের নাম',c.name);if(n===null)return;const ph=prompt('মোবাইল',c.phone||'');if(ph===null)return;const fr=prompt('Fridge No.',c.fridge||'');if(fr===null)return;const r=prompt('মাসিক ভাড়া',c.rent);if(r===null)return;const loc=prompt('লোকেশন',c.location||'');if(loc===null)return;
+ c.name=n.trim()||c.name;c.phone=ph.trim();c.fridge=fr.trim()||c.fridge;c.rent=Number(r)||0;c.location=loc.trim();save();if(!document.getElementById('modal').classList.contains('hidden'))openMonths(selectedId);
+}
+function removeCustomer(id){if(confirm('এই কাস্টমার মুছে ফেলবেন?')){data=data.filter(c=>c.id!==id);save()}}
+function sendWhatsApp(){
+ const c=data.find(x=>x.id===selectedId);if(!c)return;let phone=(c.phone||'').replace(/\D/g,'');if(phone.startsWith('01'))phone='880'+phone.slice(1);if(phone.length<11)return alert('সঠিক মোবাইল নম্বর নেই।');
+ const now=new Date(),key=now.getFullYear()+'-'+now.getMonth(),p=c.paid?.[key];const msg=`লিমন রেফ্রিজারেটর%0Aকাস্টমার: ${encodeURIComponent(c.name)}%0Aফ্রিজ: ${encodeURIComponent(c.fridge)}%0Aমাসিক ভাড়া: ${c.rent}%0Aএই মাসের অবস্থা: ${p?'আদায় হয়েছে':'বকেয়া'}%0A${p?'আদায়: '+p.amount:'বকেয়া: '+c.rent}`;
+ window.open('https://wa.me/'+phone+'?text='+msg,'_blank');
+}
+function backupDownload(){
+ const payload={app:'Limon Refrigerator',version:2,createdAt:new Date().toISOString(),data};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='limon-refrigerator-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function restoreBackup(e){
+ const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const p=JSON.parse(r.result);const x=Array.isArray(p)?p:p.data;if(!Array.isArray(x))throw Error();if(confirm('বর্তমান ডাটার বদলে Backup Restore করবেন?')){data=x;save();alert('✅ Backup Restore হয়েছে')}}catch(err){alert('❌ Backup ফাইল সঠিক নয়')}};r.readAsText(file);e.target.value='';
+}
+function printReport(){
+ const w=window.open('','_blank');if(!w)return alert('Browser popup বন্ধ করেছে। Popup allow করুন।');
+ const rows=data.map(c=>`<tr><td>${esc(c.id)}</td><td>${esc(c.name)}</td><td>${esc(c.phone)}</td><td>${esc(c.fridge)}</td><td>${money(c.rent)}</td><td>${c.status==='active'?'চলমান':'বন্ধ'}</td></tr>`).join('');
+ w.document.write(`<html lang="bn"><head><meta charset="utf-8"><title>লিমন রেফ্রিজারেটর রিপোর্ট</title><style>body{font-family:Arial;padding:25px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #999;padding:7px;text-align:right}h1{text-align:center}</style></head><body><h1>লিমন রেফ্রিজারেটর</h1><p>কাস্টমার রিপোর্ট</p><table><tr><th>ID</th><th>নাম</th><th>মোবাইল</th><th>ফ্রিজ</th><th>ভাড়া</th><th>স্ট্যাটাস</th></tr>${rows}</table></body></html>`);w.document.close();w.print();
+}
+render();
+</script>
+</body></html>
